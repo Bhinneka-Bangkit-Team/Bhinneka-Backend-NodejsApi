@@ -49,6 +49,23 @@ export class AppController {
     return this.authService.register(payload);
   }
 
+  // This route does not need to authenticate users
+  @Post('auth/checkUser')
+  async checkUser(
+    @Body('username') username: string,
+    @Body('password') password: string,
+    @Body('firstName') firstName: string,
+    @Body('lastName') lastName: string,
+  ) {
+    const payload = {
+      username: username,
+      firstName: firstName,
+      lastName: lastName,
+    };
+
+    return this.authService.checkUser(payload);
+  }
+
   // This route need users to be authenticated
   @UseGuards(JwtAuthGuard)
   @Get('profile')

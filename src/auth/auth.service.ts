@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+    const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
@@ -27,9 +27,13 @@ export class AuthService {
 
   async register(user: any) {
     await this.usersService.create(user);
-    const payload = { username: user.username, sub: user.userId };
+    const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async checkUser(user: any){
+    return await this.usersService.findUser(user.username);
   }
 }
