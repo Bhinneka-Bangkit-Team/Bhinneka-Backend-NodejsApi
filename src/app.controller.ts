@@ -66,6 +66,55 @@ export class AppController {
     return this.authService.checkUser(payload);
   }
 
+  // This route does not need to authenticate users
+  @Post('google/tts')
+  async textspeech(
+    @Body('text') username: string,
+    @Body('lang') password: string,
+  ) {
+    return 'tes';
+  }
+
+  // This route need users to be authenticated
+  @UseGuards(JwtAuthGuard)
+  @Post('google/stt')
+  async speechtext(
+    @Body('speech') username: string,
+    @Body('lang') password: string,
+  ) {
+    return 'tes';
+  }
+
+  // This route need users to be authenticated
+  @UseGuards(JwtAuthGuard)
+  @Post('google/translate')
+  async translate(
+    @Body('text') username: string,
+    @Body('lang') password: string,
+  ) {
+    return 'tes';
+  }
+
+  // This route need users to be authenticated
+  @UseGuards(JwtAuthGuard)
+  @Post('chat/store')
+  async storeChat(
+    @Body('text') username: string,
+    @Body('lang') password: string,
+  ) {
+    return 'tes';
+  }
+
+  // This route need users to be authenticated
+  @UseGuards(JwtAuthGuard)
+  @Get('chat/get')
+  async getChat(
+    @Body('text') username: string,
+    @Body('lang') password: string,
+  ) {
+    return 'tes';
+  }
+
   // This route need users to be authenticated
   @UseGuards(JwtAuthGuard)
   @Get('profile')

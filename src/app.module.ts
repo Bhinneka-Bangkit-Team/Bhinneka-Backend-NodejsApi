@@ -13,10 +13,10 @@ import { User } from './users/user.entity';
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: '34.101.83.165',
       port: 3306,
-      username: 'ricoferdian',
-      password: '',
+      username: 'root',
+      password: 'secret',
       database: 'db_bhinneka',
       entities: [],
       synchronize: true,
