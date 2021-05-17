@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { User } from './users/user.entity';
+import { GoogleapisService } from './googleapis/googleapis.service';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { User } from './users/user.entity';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleapisService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

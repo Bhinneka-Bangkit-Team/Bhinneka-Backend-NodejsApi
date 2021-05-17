@@ -76,7 +76,7 @@ export class AppController {
   }
 
   // This route need users to be authenticated
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('google/stt')
   async speechtext(
     @Body('speech') username: string,
@@ -86,7 +86,7 @@ export class AppController {
   }
 
   // This route need users to be authenticated
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('google/translate')
   async translate(
     @Body('text') username: string,
