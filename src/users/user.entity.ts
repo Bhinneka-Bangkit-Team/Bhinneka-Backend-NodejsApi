@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-@Entity('rbac_user')
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

@@ -7,24 +7,32 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import * as bcrypt from 'bcrypt';
+import { GoogleapisService } from './googleapis/googleapis.service';
+import { UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { UploadedFile } from '@nestjs/common';
+import { UsersService } from './users/users.service';
+import { ChatService } from './chat/chat.service';
 
 @Controller('api')
 export class AppController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private googleService: GoogleapisService,
+    private usersService: UsersService,
+    private chatService: ChatService,
+  ) {}
 
-  // This route does not need to authenticate users
   @Post('auth/login')
   async login(
     @Body('username') username: string,
     @Body('password') password: string,
   ) {
-    const hashedPassword = await bcrypt.hash(password, 12);
     const payload = {
       username: username,
-      password: hashedPassword,
+      password: password,
     };
 
     return this.authService.login(payload);
@@ -49,76 +57,46 @@ export class AppController {
     return this.authService.register(payload);
   }
 
-  // This route does not need to authenticate users
-  @Post('auth/checkUser')
-  async checkUser(
-    @Body('username') username: string,
-    @Body('password') password: string,
-    @Body('firstName') firstName: string,
-    @Body('lastName') lastName: string,
-  ) {
-    const payload = {
-      username: username,
-      firstName: firstName,
-      lastName: lastName,
-    };
-
-    return this.authService.checkUser(payload);
-  }
-
-  // This route does not need to authenticate users
+  @UseGuards(JwtAuthGuard)
   @Post('google/tts')
-  async textspeech(
-    @Body('text') username: string,
-    @Body('lang') password: string,
-  ) {
-    return 'tes';
+  async textspeech(@Body('text') text: string, @Body('lang') lang: string) {
+    return this.googleService.googletts(text, lang);
   }
 
-  // This route need users to be authenticated
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('google/stt')
+  @UseInterceptors(FileInterceptor('file'))
   async speechtext(
-    @Body('speech') username: string,
-    @Body('lang') password: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('lang') lang: string,
   ) {
-    return 'tes';
+    return this.googleService.googlestt(file.buffer, lang);
   }
 
-  // This route need users to be authenticated
-  // @UseGuards(JwtAuthGuard)
-  @Post('google/translate')
-  async translate(
-    @Body('text') username: string,
-    @Body('lang') password: string,
-  ) {
-    return 'tes';
-  }
-
-  // This route need users to be authenticated
   @UseGuards(JwtAuthGuard)
   @Post('chat/store')
   async storeChat(
-    @Body('text') username: string,
-    @Body('lang') password: string,
+    @Request() req,
+    @Body('text') text: string,
+    @Body('lang') lang: string,
   ) {
-    return 'tes';
+    const payload = {
+      user_id: req.user.id,
+      text: text,
+      lang: lang,
+    };
+    return this.chatService.storeUserChat(payload);
   }
 
-  // This route need users to be authenticated
   @UseGuards(JwtAuthGuard)
   @Get('chat/get')
-  async getChat(
-    @Body('text') username: string,
-    @Body('lang') password: string,
-  ) {
-    return 'tes';
+  async getChat(@Request() req) {
+    return this.chatService.getUserChat(req.user.id);
   }
 
-  // This route need users to be authenticated
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    return this.usersService.findOne(req.user.id);
   }
 }

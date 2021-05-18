@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { HttpStatus } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { HttpException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
@@ -9,31 +12,53 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findUser(username);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  }
-
   async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    const user_data = await this.usersService.findUser(user.username);
+    if (!user_data) {
+      throw new HttpException(
+        {
+          status: HttpStatus.OK,
+          message: 'Username atau password salah',
+          data: [],
+          error: 'Username atau password salah',
+        },
+        HttpStatus.OK,
+      );
+    }
+    if (await bcrypt.compare(user.password, user_data.password)) {
+      const payload = { username: user_data.username, sub: user_data.id };
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Login berhasil !',
+        data: user_data,
+        error: '',
+        access_token: this.jwtService.sign(payload),
+      };
+    }
+    throw new HttpException(
+      {
+        status: HttpStatus.OK,
+        message: 'Username atau password salah',
+        data: [],
+        error: 'Username atau password salah',
+      },
+      HttpStatus.OK,
+    );
   }
 
   async register(user: any) {
-    await this.usersService.create(user);
-    const payload = { username: user.username, sub: user.id };
+    const user_data = await this.usersService.create(user);
+    const payload = { username: user_data.username, sub: user_data.id };
     return {
+      statusCode: HttpStatus.OK,
+      message: 'Pendaftaran berhasil !',
+      data: user_data,
+      error: '',
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async checkUser(user: any){
+  async checkUser(user: any) {
     return await this.usersService.findUser(user.username);
   }
 }

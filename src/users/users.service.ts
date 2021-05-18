@@ -20,13 +20,15 @@ export class UsersService {
     return this.usersRepository.findOne(id);
   }
 
-  async create(user: any): Promise<User> {
-    if (!this.checkUsernameExists(user.username)) {
+  async create(user: any) {
+    if ((await this.checkUsernameExists(user.username)) == false) {
       return this.usersRepository.save(user);
     } else {
       throw new HttpException(
         {
           status: HttpStatus.OK,
+          message: 'Username sudah digunakan',
+          data: [],
           error: 'Username sudah digunakan',
         },
         HttpStatus.OK,
