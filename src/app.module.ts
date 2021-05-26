@@ -28,8 +28,8 @@ import { Chat } from './chat/chat.entity';
     // }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      socketPath:
-        '/cloudsql/folkloric-ocean-308008:asia-southeast2:bhinneka-mysql8',
+      // socketPath:
+      //   '/cloudsql/folkloric-ocean-308008:asia-southeast2:bhinneka-mysql8',
       host: '34.101.83.165',
       port: 3306,
       username: 'root',

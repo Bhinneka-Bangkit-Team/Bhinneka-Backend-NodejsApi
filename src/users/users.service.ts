@@ -21,32 +21,32 @@ export class UsersService {
   }
 
   async create(user: any) {
-    if ((await this.checkUsernameExists(user.username)) == false) {
+    if ((await this.checkEmailExists(user.email)) == false) {
       return this.usersRepository.save(user);
     } else {
       throw new HttpException(
         {
           status: HttpStatus.OK,
-          message: 'Username sudah digunakan',
+          message: 'Email sudah digunakan',
           data: [],
-          error: 'Username sudah digunakan',
+          error: 'Email sudah digunakan',
         },
         HttpStatus.OK,
       );
     }
   }
 
-  async findUser(username: string): Promise<User> {
-    return this.usersRepository.findOne({ username });
+  async findUser(email: string): Promise<User> {
+    return this.usersRepository.findOne({ email });
   }
 
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
 
-  async checkUsernameExists(username: string): Promise<boolean> {
+  async checkEmailExists(email: string): Promise<boolean> {
     const user = await this.usersRepository.findOne({
-      username: username,
+      email: email,
     });
     if (user) {
       return true;

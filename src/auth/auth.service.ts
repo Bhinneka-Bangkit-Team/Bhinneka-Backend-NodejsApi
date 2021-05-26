@@ -13,20 +13,20 @@ export class AuthService {
   ) {}
 
   async login(user: any) {
-    const user_data = await this.usersService.findUser(user.username);
+    const user_data = await this.usersService.findUser(user.email);
     if (!user_data) {
       throw new HttpException(
         {
           status: HttpStatus.OK,
-          message: 'Username atau password salah',
+          message: 'Email atau password salah',
           data: [],
-          error: 'Username atau password salah',
+          error: 'Email atau password salah',
         },
         HttpStatus.OK,
       );
     }
     if (await bcrypt.compare(user.password, user_data.password)) {
-      const payload = { username: user_data.username, sub: user_data.id };
+      const payload = { email: user_data.email, sub: user_data.id };
       return {
         statusCode: HttpStatus.OK,
         message: 'Login berhasil !',
@@ -38,9 +38,9 @@ export class AuthService {
     throw new HttpException(
       {
         status: HttpStatus.OK,
-        message: 'Username atau password salah',
+        message: 'Email atau password salah',
         data: [],
-        error: 'Username atau password salah',
+        error: 'Email atau password salah',
       },
       HttpStatus.OK,
     );
@@ -48,7 +48,7 @@ export class AuthService {
 
   async register(user: any) {
     const user_data = await this.usersService.create(user);
-    const payload = { username: user_data.username, sub: user_data.id };
+    const payload = { email: user_data.email, sub: user_data.id };
     return {
       statusCode: HttpStatus.OK,
       message: 'Pendaftaran berhasil !',
@@ -59,6 +59,6 @@ export class AuthService {
   }
 
   async checkUser(user: any) {
-    return await this.usersService.findUser(user.username);
+    return await this.usersService.findUser(user.email);
   }
 }

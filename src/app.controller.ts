@@ -27,11 +27,11 @@ export class AppController {
 
   @Post('auth/login')
   async login(
-    @Body('username') username: string,
+    @Body('email') email: string,
     @Body('password') password: string,
   ) {
     const payload = {
-      username: username,
+      email: email,
       password: password,
     };
 
@@ -41,14 +41,14 @@ export class AppController {
   // This route does not need to authenticate users
   @Post('auth/register')
   async register(
-    @Body('username') username: string,
+    @Body('email') email: string,
     @Body('password') password: string,
     @Body('firstName') firstName: string,
     @Body('lastName') lastName: string,
   ) {
     const hashedPassword = await bcrypt.hash(password, 12);
     const payload = {
-      username: username,
+      email: email,
       password: hashedPassword,
       firstName: firstName,
       lastName: lastName,
