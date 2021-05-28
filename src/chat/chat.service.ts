@@ -1,6 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
-import { HttpException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Chat } from './chat.entity';

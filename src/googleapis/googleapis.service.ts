@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as textToSpeech from '@google-cloud/text-to-speech';
 import * as speech from '@google-cloud/speech';
-import * as fs from 'fs';
-import * as util from 'util';
 import { HttpStatus } from '@nestjs/common';
 
 // Creates a client
@@ -27,8 +25,6 @@ export class GoogleapisService {
 
     // Performs the text-to-speech request
     const [response] = await ttsClient.synthesizeSpeech(request);
-    // Write the binary audio content to a local file
-    const writeFile = util.promisify(fs.writeFile);
     // await writeFile('output.mp3', response.audioContent, 'binary');
     return {
       statusCode: HttpStatus.OK,

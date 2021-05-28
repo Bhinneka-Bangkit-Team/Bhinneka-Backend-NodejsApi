@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('chats')
 export class Chat {
@@ -6,7 +6,7 @@ export class Chat {
   id: number;
 
   @Column()
-  user_id: number;
+  userId: number;
 
   @Column()
   text: string;

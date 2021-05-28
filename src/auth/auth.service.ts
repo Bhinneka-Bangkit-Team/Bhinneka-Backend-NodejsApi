@@ -21,6 +21,7 @@ export class AuthService {
           message: 'Email atau password salah',
           data: [],
           error: 'Email atau password salah',
+          isSuccessful: false,
         },
         HttpStatus.OK,
       );
@@ -32,7 +33,8 @@ export class AuthService {
         message: 'Login berhasil !',
         data: user_data,
         error: '',
-        access_token: this.jwtService.sign(payload),
+        accessToken: this.jwtService.sign(payload),
+        isSuccessful: true,
       };
     }
     throw new HttpException(
@@ -41,6 +43,7 @@ export class AuthService {
         message: 'Email atau password salah',
         data: [],
         error: 'Email atau password salah',
+        isSuccessful: false,
       },
       HttpStatus.OK,
     );
@@ -54,7 +57,8 @@ export class AuthService {
       message: 'Pendaftaran berhasil !',
       data: user_data,
       error: '',
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
+      isSuccessful: true,
     };
   }
 
