@@ -26,10 +26,11 @@ export class UsersService {
     } else {
       throw new HttpException(
         {
-          status: HttpStatus.OK,
+          statusCode: HttpStatus.OK,
           message: 'Email sudah digunakan',
-          data: [],
+          data: {},
           error: 'Email sudah digunakan',
+          isSuccessful: false,
         },
         HttpStatus.OK,
       );

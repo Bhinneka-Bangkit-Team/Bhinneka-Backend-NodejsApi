@@ -9,6 +9,9 @@ export class Chat {
   userId: number;
 
   @Column()
+  isSpeaker: number;
+
+  @Column()
   text: string;
 
   @Column()

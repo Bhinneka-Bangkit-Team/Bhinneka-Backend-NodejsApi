@@ -17,9 +17,9 @@ export class AuthService {
     if (!user_data) {
       throw new HttpException(
         {
-          status: HttpStatus.OK,
+          statusCode: HttpStatus.OK,
           message: 'Email atau password salah',
-          data: [],
+          data: {},
           error: 'Email atau password salah',
           isSuccessful: false,
         },
@@ -39,9 +39,9 @@ export class AuthService {
     }
     throw new HttpException(
       {
-        status: HttpStatus.OK,
+        statusCode: HttpStatus.OK,
         message: 'Email atau password salah',
-        data: [],
+        data: {},
         error: 'Email atau password salah',
         isSuccessful: false,
       },

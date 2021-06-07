@@ -4,6 +4,7 @@ import {
   Get,
   Request,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
@@ -15,6 +16,11 @@ import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { UploadedFile } from '@nestjs/common';
 import { UsersService } from './users/users.service';
 import { ChatService } from './chat/chat.service';
+import { Param } from '@nestjs/common';
+import { Header } from '@nestjs/common';
+import { Response } from 'express';
+import { HttpStatus } from '@nestjs/common';
+import * as fs from 'fs';
 
 @Controller('api')
 export class AppController {
@@ -59,8 +65,30 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Post('google/tts')
-  async textspeech(@Body('text') text: string, @Body('lang') lang: string) {
-    return this.googleService.googletts(text, lang);
+  async textspeech(
+    @Request() req,
+    @Body('text') text: string,
+    @Body('lang') lang: string,
+  ) {
+    const isSuccess = await this.googleService.googletts(
+      text,
+      lang,
+      req.user.id,
+    );
+    if (isSuccess) {
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Pengenalan berhasil !',
+        data: `http://${req.headers.host}/api/audio/get/tts${req.user.id}.mp3`,
+        error: '',
+      };
+    }
+    return {
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      message: 'Pengenalan gagal !',
+      data: null,
+      error: '',
+    };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -73,15 +101,35 @@ export class AppController {
     return this.googleService.googlestt(file.buffer, lang);
   }
 
+  @Get('audio/get/:filename')
+  @Header('Content-Type', 'application/pdf')
+  async getFile(@Res() res: Response, @Param('filename') filename: string) {
+    console.log('filename', filename);
+    const filePath = `audio/${filename}`;
+    const stat = fs.statSync(filePath);
+    console.log('filePath', filePath);
+
+    res.writeHead(200, {
+      'Content-Type': 'audio/mpeg',
+      'Content-Length': stat.size,
+    });
+
+    const readStream = fs.createReadStream(filePath);
+    // We replaced all the event handlers with a simple call to readStream.pipe()
+    readStream.pipe(res);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('chat/store')
   async storeChat(
     @Request() req,
     @Body('text') text: string,
     @Body('lang') lang: string,
+    @Body('isSpeaker') isSpeaker: number,
   ) {
     const payload = {
-      user_id: req.user.id,
+      userId: req.user.id,
+      isSpeaker: isSpeaker,
       text: text,
       lang: lang,
     };

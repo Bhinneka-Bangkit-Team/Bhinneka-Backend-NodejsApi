@@ -12,12 +12,13 @@ export class ChatService {
   ) {}
 
   async getUserChat(user_id: number): Promise<any> {
-    const data = await this.chatRepository.find({ user_id: user_id });
+    const data = await this.chatRepository.find({ userId: user_id });
     return {
       statusCode: HttpStatus.OK,
       message: 'Pengambilan data chat berhasil !',
       data: data,
       error: '',
+      isSuccessful: true,
     };
   }
 
@@ -26,8 +27,9 @@ export class ChatService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Penyimpanan data chat berhasil !',
-      data: data,
+      data: [data],
       error: '',
+      isSuccessful: true,
     };
   }
 }
