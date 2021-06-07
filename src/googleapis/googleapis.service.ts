@@ -3,11 +3,14 @@ import * as textToSpeech from '@google-cloud/text-to-speech';
 import * as speech from '@google-cloud/speech';
 import { HttpStatus } from '@nestjs/common';
 import { writeFile } from 'fs/promises';
+import { Storage } from '@google-cloud/storage';
 import * as fs from 'fs';
 
 // Creates a client
 const ttsClient = new textToSpeech.TextToSpeechClient();
 const speechClient = new speech.SpeechClient();
+const storage = new Storage();
+const bucket = storage.bucket('bhinneka-backend-bucket');
 
 @Injectable()
 export class GoogleapisService {
@@ -27,10 +30,20 @@ export class GoogleapisService {
 
     // Performs the text-to-speech request
     const [response] = await ttsClient.synthesizeSpeech(request);
-    if (!fs.existsSync('audio')) {
-      fs.mkdirSync('audio');
+    if (!fs.existsSync('audio_transcribe')) {
+      fs.mkdirSync('audio_transcribe');
     }
-    await writeFile(`audio/tts${userId}.mp3`, response.audioContent, 'binary');
+
+    // Create a new blob in the bucket and upload the file data.
+    const blob = bucket.file(`audio_transcribe/tts${userId}.mp3`);
+    // Save byte
+    blob.save(Buffer.from(response.audioContent));
+
+    // await writeFile(
+    //   `audio_transcribe/tts${userId}.mp3`,
+    //   response.audioContent,
+    //   'binary',
+    // );
     return true;
   }
 

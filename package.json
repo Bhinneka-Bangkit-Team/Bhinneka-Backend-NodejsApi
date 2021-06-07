@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@google-cloud/speech": "^4.5.0",
+    "@google-cloud/storage": "^5.8.5",
     "@google-cloud/text-to-speech": "^3.2.1",
     "@google-cloud/translate": "^6.2.1",
     "@nestjs/common": "^7.6.13",

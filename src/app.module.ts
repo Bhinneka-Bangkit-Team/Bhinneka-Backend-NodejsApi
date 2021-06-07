@@ -15,19 +15,10 @@ import { Chat } from './chat/chat.entity';
   imports: [
     AuthModule,
     UsersModule,
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: 'localhost',
-    //   port: 3306,
-    //   username: 'ricoferdian',
-    //   password: '',
-    //   database: 'db_bhinneka',
-    //   entities: [],
-    //   synchronize: true,
-    //   autoLoadEntities: true,
-    // }),
     TypeOrmModule.forRoot({
       type: 'mysql',
+      socketPath:
+        '/cloudsql/folkloric-ocean-308008:asia-southeast2:bhinneka-mysql8',
       host: '34.101.83.165',
       port: 3306,
       username: 'root',

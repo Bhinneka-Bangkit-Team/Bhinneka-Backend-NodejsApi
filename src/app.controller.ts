@@ -79,9 +79,15 @@ export class AppController {
       return {
         statusCode: HttpStatus.OK,
         message: 'Pengenalan berhasil !',
-        data: `http://${req.headers.host}/api/audio/get/tts${req.user.id}.mp3`,
+        data: `https://storage.googleapis.com/bhinneka-backend-bucket/audio_transcribe/tts${req.user.id}.mp3`,
         error: '',
       };
+      // return {
+      //   statusCode: HttpStatus.OK,
+      //   message: 'Pengenalan berhasil !',
+      //   data: `http://${req.headers.host}/api/audio/get/tts${req.user.id}.mp3`,
+      //   error: '',
+      // };
     }
     return {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -105,7 +111,7 @@ export class AppController {
   @Header('Content-Type', 'application/pdf')
   async getFile(@Res() res: Response, @Param('filename') filename: string) {
     console.log('filename', filename);
-    const filePath = `audio/${filename}`;
+    const filePath = `audio_transcribe/${filename}`;
     const stat = fs.statSync(filePath);
     console.log('filePath', filePath);
 
