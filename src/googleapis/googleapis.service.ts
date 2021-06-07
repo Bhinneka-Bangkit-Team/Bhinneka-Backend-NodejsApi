@@ -14,7 +14,7 @@ const bucket = storage.bucket('bhinneka-backend-bucket');
 
 @Injectable()
 export class GoogleapisService {
-  async googletts(text: string, lang: string, userId: string) {
+  async googletts(text: string, lang: string, uniqueid: string) {
     // The text to synthesize
     // const text = 'hello, world!';
 
@@ -35,15 +35,10 @@ export class GoogleapisService {
     }
 
     // Create a new blob in the bucket and upload the file data.
-    const blob = bucket.file(`audio_transcribe/tts${userId}.mp3`);
+    const blob = bucket.file(`audio_transcribe/tts${uniqueid}.mp3`);
     // Save byte
     blob.save(Buffer.from(response.audioContent));
 
-    // await writeFile(
-    //   `audio_transcribe/tts${userId}.mp3`,
-    //   response.audioContent,
-    //   'binary',
-    // );
     return true;
   }
 

@@ -20,6 +20,7 @@ import { Param } from '@nestjs/common';
 import { Header } from '@nestjs/common';
 import { Response } from 'express';
 import { HttpStatus } from '@nestjs/common';
+import { nanoid } from 'nanoid';
 import * as fs from 'fs';
 
 @Controller('api')
@@ -70,16 +71,13 @@ export class AppController {
     @Body('text') text: string,
     @Body('lang') lang: string,
   ) {
-    const isSuccess = await this.googleService.googletts(
-      text,
-      lang,
-      req.user.id,
-    );
+    const uniqueid = nanoid();
+    const isSuccess = await this.googleService.googletts(text, lang, uniqueid);
     if (isSuccess) {
       return {
         statusCode: HttpStatus.OK,
         message: 'Pengenalan berhasil !',
-        data: `https://storage.googleapis.com/bhinneka-backend-bucket/audio_transcribe/tts${req.user.id}.mp3`,
+        data: `https://storage.googleapis.com/bhinneka-backend-bucket/audio_transcribe/tts${uniqueid}.mp3`,
         error: '',
       };
       // return {
