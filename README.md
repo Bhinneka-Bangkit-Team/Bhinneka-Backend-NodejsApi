@@ -93,8 +93,7 @@ $ git://github.com/Bhinneka-Bangkit-Team/Bhinneka-Backend-NodejsApi.git
   
 4. Run the app
 
-## Start
-
+* Start
 ```bash
 # development
 $ npm run start
@@ -106,8 +105,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
+* Test
 ```bash
 # unit tests
 $ npm run test
