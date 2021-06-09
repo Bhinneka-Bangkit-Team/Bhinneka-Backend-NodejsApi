@@ -87,7 +87,11 @@ $ git://github.com/Bhinneka-Bangkit-Team/Bhinneka-Backend-NodejsApi.git
   npm install
   ```
 
-3. Run the app
+3. Configure Database Connection and Cloud Storage bucket
+* Edit the database connection in ormconfig.json file
+* Edit the bucket name in /src/googleapis/googleapis.service.ts file, change `bhinneka-backend-bucket` into your bucket name
+  
+4. Run the app
 
 ## Start
 
