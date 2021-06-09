@@ -74,7 +74,7 @@ The is are our MVP Feature:
 As usual, you get started by cloning the project to your local machine:
 
 ```
-$ git://github.com/Bhinneka-Bangkit-Team/Bhinneka-Android-App.git
+$ git://github.com/Bhinneka-Bangkit-Team/Bhinneka-Backend-NodejsApi.git
 ```
 
 ### Prerequisites
